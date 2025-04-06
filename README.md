@@ -1,6 +1,6 @@
 # Fork of [MacroPad mini](https://github.com/wagiminator/CH552-Macropad-mini/) for the Knob version
 
-![Macropad_knob.jpg](https://raw.githubusercontent.com/Puding07/CH552-Macropad-mini-cncjs/main/documentation/Macropad_knob.jpg)
+![Macropad_knob.jpg](https://raw.githubusercontent.com/Puding07/CH552-Macropad-mini-cncjs/main/documentation/Macropad_knob.JPG)
 
 ## Configured for CNCjs
 
@@ -14,7 +14,7 @@
 ## For first boot:
 you need to jump 3.3V to D+ with a 10K Ohm resistor
 
-![Awful_boot_soldering.jpg](https://raw.githubusercontent.com/Puding07/CH552-Macropad-mini-cncjs/main/documentation/Awful_boot_soldering.jpg)
+![Awful_boot_soldering.jpg](https://raw.githubusercontent.com/Puding07/CH552-Macropad-mini-cncjs/main/documentation/Awful_boot_soldering.JPG)
 
 ## Rest:
 Can enter boot mode by pressing `Key bottom` while connecting USB - white LED should turn on
