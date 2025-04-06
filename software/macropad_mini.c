@@ -60,6 +60,9 @@ void USB_ISR(void) __interrupt(INT_NO_USB) {
 
 #pragma disable_warning 110                 // Keep calm, EVELYN!
 
+int axis = 0; // 0 = X, 1 = Y, 2 = Z
+// int jog_distance = 0; // 0 = 1mm, 1 = 10mm, 2 = 20mm, 3 = 3mm, 4 = 40mm, 5 = 50mm etc. 
+
 // ===================================================================================
 // Macro Functions which associate Actions with Events (Customize your MacroPad here!)
 // ===================================================================================
@@ -69,64 +72,110 @@ void USB_ISR(void) __interrupt(INT_NO_USB) {
 // Key 1 example -> Linux open terminal and run shutdown command
 // -------------------------------------------------------------
 
-// Define action(s) if key1 was pressed
+// ! - Feed Hold
 inline void KEY1_PRESSED() {
-  KBD_press(KBD_KEY_LEFT_GUI);                        // press left WIN key
-  KBD_type('t');                                      // press and release 'T' key
-  KBD_release(KBD_KEY_LEFT_GUI);                      // release left WIN key
-  DLY_ms(500);                                        // wait for terminal to open
-  KBD_print("sudo shutdown -h now");                  // type shutdown command
-  KBD_type(KBD_KEY_RETURN);                           // press and release RETURN key
+  KBD_type('!');                          // type '!' character
 }
 
-// Define action(s) if key1 was released
 inline void KEY1_RELEASED() {
-                                                      // nothing to do
+  // nothing to do
 }
 
-// Define action(s) when key1 is held
 inline void KEY1_HOLD() {
-                                                      // nothing to do
+  // nothing to do
 }
 
-// Key 2 example -> CTRL + ALT + DEL (shutdown)
-// --------------------------------------------
 
-// Define action(s) if key2 was pressed
+// ctrl + alt + command + h - Homing
 inline void KEY2_PRESSED() {
-  KBD_press(KBD_KEY_LEFT_CTRL);                       // press left CTRL key
-  KBD_press(KBD_KEY_LEFT_ALT);                        // press left ALT key
-  KBD_press(KBD_KEY_DELETE);                          // press DEL key
+  KBD_press(KBD_KEY_LEFT_CTRL);
+  KBD_press(KBD_KEY_LEFT_ALT);
+  KBD_press(KBD_KEY_LEFT_GUI);
+  KBD_type('h');
+  KBD_release(KBD_KEY_LEFT_CTRL);
+  KBD_release(KBD_KEY_LEFT_ALT);
+  KBD_release(KBD_KEY_LEFT_GUI);
 }
 
-// Define action(s) if key2 was released
 inline void KEY2_RELEASED() {
-  KBD_release(KBD_KEY_DELETE);                        // release DEL key
-  KBD_release(KBD_KEY_LEFT_ALT);                      // release left ALT key
-  KBD_release(KBD_KEY_LEFT_CTRL);                     // release left CTRL key
+  // nothing to do
 }
 
-// Define action(s) when key2 is held
 inline void KEY2_HOLD() {
-                                                      // nothing to do
+  // nothing to do
 }
 
-// Key 3 example -> consumer key (volume mute)
-// -------------------------------------------
-
-// Define action(s) if key3 was pressed
+// ctrl + alt + command + u - Unlock
 inline void KEY3_PRESSED() {
-  CON_press(CON_VOL_MUTE);                            // press VOLUME MUTE consumer key
+  KBD_press(KBD_KEY_LEFT_CTRL);
+  KBD_press(KBD_KEY_LEFT_ALT);
+  KBD_press(KBD_KEY_LEFT_GUI);
+  KBD_type('u');
+  KBD_release(KBD_KEY_LEFT_CTRL);
+  KBD_release(KBD_KEY_LEFT_ALT);
+  KBD_release(KBD_KEY_LEFT_GUI);
+  // CON_press(CON_VOL_MUTE);
 }
 
-// Define action(s) if key3 was released
 inline void KEY3_RELEASED() {
-  CON_release(CON_VOL_MUTE);                          // release VOLUME MUTE consumer key
+  // nothing to do
 }
 
-// Define action(s) when key3 is held
 inline void KEY3_HOLD() {
-                                                      // nothing to do
+  // nothing to do
+}
+
+// ctrl + alt + command + x - Select/Deselect X Axis
+// ctrl + alt + command + y - Select/Deselect Y Axis
+// ctrl + alt + command + z - Select/Deselect Z Axis
+// ctrl + alt + command + a - Select/Deselect A Axis
+inline void ENC_SW_PRESSED() {
+  KBD_press(KBD_KEY_LEFT_CTRL);
+  KBD_press(KBD_KEY_LEFT_ALT);
+  KBD_press(KBD_KEY_LEFT_GUI);
+  if(axis == 0) {
+    axis = 1; // Y Axis
+    KBD_type('y');
+  } else if(axis == 1) {
+    axis = 2; // Z Axis
+    KBD_type('z');
+  } else if(axis == 2) {
+    axis = 0; // X Axis
+    KBD_type('x');
+  }
+  KBD_release(KBD_KEY_LEFT_CTRL);
+  KBD_release(KBD_KEY_LEFT_ALT);
+  KBD_release(KBD_KEY_LEFT_GUI);
+}
+
+inline void ENC_SW_RELEASED() {
+  // nothing to do
+}
+
+inline void ENC_SW_HOLD() {
+  // nothing to do
+}
+
+// ctrl + alt + command + ] or f - Jog Forward
+inline void ENC_CL() {
+  KBD_press(KBD_KEY_LEFT_CTRL);
+  KBD_press(KBD_KEY_LEFT_ALT);
+  KBD_press(KBD_KEY_LEFT_GUI);
+  KBD_type(']');
+  KBD_release(KBD_KEY_LEFT_CTRL);
+  KBD_release(KBD_KEY_LEFT_ALT);
+  KBD_release(KBD_KEY_LEFT_GUI);
+}
+
+// ctrl + alt + command + [ or b - Jog Backward
+inline void ENC_CCL() {
+  KBD_press(KBD_KEY_LEFT_CTRL);
+  KBD_press(KBD_KEY_LEFT_ALT);
+  KBD_press(KBD_KEY_LEFT_GUI);
+  KBD_type('[');
+  KBD_release(KBD_KEY_LEFT_CTRL);
+  KBD_release(KBD_KEY_LEFT_ALT);
+  KBD_release(KBD_KEY_LEFT_GUI);
 }
 
 // ===================================================================================
@@ -155,6 +204,7 @@ void main(void) {
   __bit key1last = 0;                       // last state of key 1
   __bit key2last = 0;                       // last state of key 2
   __bit key3last = 0;                       // last state of key 3
+  __bit enc_sw_last = 0;                    // last state of key 3
   __idata uint8_t i;                        // temp variable
 
   // Setup
@@ -164,7 +214,7 @@ void main(void) {
 
   // Enter bootloader if key 1 is pressed
   if(!PIN_read(PIN_KEY1)) {                 // key 1 pressed?
-    for(i=9; i; i--) NEO_sendByte(127);     // light up all pixels
+    for(i=9; i; i--) NEO_sendByte(NEO_MAX);     // light up all pixels
     BOOT_now();                             // enter bootloader
   }
 
@@ -178,7 +228,7 @@ void main(void) {
     if(!PIN_read(PIN_KEY1) != key1last) {   // key 1 state changed?
       key1last = !key1last;                 // update last state flag
       if(key1last) {                        // key was pressed?
-        neo1 = 127;                         // light up corresponding NeoPixel
+        neo1 = NEO_MAX;                         // light up corresponding NeoPixel
         NEO_update();                       // update NeoPixels NOW!
         KEY1_PRESSED();                     // take proper action
       }
@@ -187,7 +237,7 @@ void main(void) {
       }
     }
     else if(key1last) {                     // key still being pressed?
-      neo1 = 127;                           // keep NeoPixel on
+      neo1 = NEO_MAX;                           // keep NeoPixel on
       KEY1_HOLD();                          // take proper action
     }
 
@@ -195,7 +245,7 @@ void main(void) {
     if(!PIN_read(PIN_KEY2) != key2last) {   // key 2 state changed?
       key2last = !key2last;                 // update last state flag
       if(key2last) {                        // key was pressed?
-        neo2 = 127;                         // light up corresponding NeoPixel
+        neo2 = NEO_MAX;                         // light up corresponding NeoPixel
         NEO_update();                       // update NeoPixels NOW!
         KEY2_PRESSED();                     // take proper action
       }
@@ -204,7 +254,7 @@ void main(void) {
       }
     }
     else if(key2last) {                     // key still being pressed?
-      neo2 = 127;                           // keep NeoPixel on
+      neo2 = NEO_MAX;                           // keep NeoPixel on
       KEY2_HOLD();                          // take proper action
     }
 
@@ -212,7 +262,7 @@ void main(void) {
     if(!PIN_read(PIN_KEY3) != key3last) {   // key 3 state changed?
       key3last = !key3last;                 // update last state flag
       if(key3last) {                        // key was pressed?
-        neo3 = 127;                         // light up corresponding NeoPixel
+        neo3 = NEO_MAX;                         // light up corresponding NeoPixel
         NEO_update();                       // update NeoPixels NOW!
         KEY3_PRESSED();                     // take proper action
       }
@@ -221,9 +271,37 @@ void main(void) {
       }
     }
     else if(key3last) {                     // key still being pressed?
-      neo3 = 127;                           // keep NeoPixel on
+      neo3 = NEO_MAX;                           // keep NeoPixel on
       KEY3_HOLD();                          // take proper action
     }
+    
+    // Handle key 3 - consumer key example (volume mute)
+    if(!PIN_read(PIN_ENC_SW) != enc_sw_last) {   // key 3 state changed?
+      enc_sw_last = !enc_sw_last;                 // update last state flag
+      if(enc_sw_last) {                        // key was pressed?
+        // skip neo
+        ENC_SW_PRESSED();                     // take proper action
+      }
+      else {                                // key was released?
+        ENC_SW_RELEASED();                    // take proper action
+      }
+    }
+    else if(enc_sw_last) {                     // key still being pressed?
+      ENC_SW_HOLD();                          // take proper action
+    }
+
+    // Handle encoder A/B - rotary encoder example (volume up/down)
+    if (!PIN_read(PIN_ENC_A)) { // encoder turned?
+      if (PIN_read(PIN_ENC_B)) {
+        ENC_CL(); // clockwise?
+      }
+      else {
+        ENC_CCL(); // counter-clockwise?
+      }
+      while (!PIN_read(PIN_ENC_A))
+        ; // wait until next detent
+    }
+
 
     // Update NeoPixels
     NEO_update();
