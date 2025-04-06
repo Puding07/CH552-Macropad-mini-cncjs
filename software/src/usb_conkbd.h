@@ -33,6 +33,8 @@ uint8_t KBD_getState(void);           // get keyboard status LEDs
 #define KBD_KEY_LEFT_SHIFT  0x81
 #define KBD_KEY_LEFT_ALT    0x82
 #define KBD_KEY_LEFT_GUI    0x83
+#define KBD_KEY_LEFT_WIN    0x5B
+#define KBD_KEY_RIGHT_WIN   0x5C
 #define KBD_KEY_RIGHT_CTRL  0x84
 #define KBD_KEY_RIGHT_SHIFT 0x85
 #define KBD_KEY_RIGHT_ALT   0x86
